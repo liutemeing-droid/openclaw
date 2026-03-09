@@ -20,7 +20,7 @@ RUN npm install -g pnpm @steipete/summarize clawhub
 # 安裝 uv (Python 套件管理器)
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin/:$PATH"
-
+RUN uv tool install nano-pdf
 # 4. 複製專案檔案並安裝 OpenClaw 依賴
 COPY . .
 RUN pnpm install
