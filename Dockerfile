@@ -22,11 +22,11 @@ COPY . .
 # 安裝專案依賴
 RUN pnpm install
 
-# ！！！關鍵增加：先執行專案建置 ！！！
+# 執行專案建置
 RUN pnpm build
 
-# 建置完後，再安裝 summarize 技能
-RUN npx openclaw skill install summarize
+# 修正：將 skill 改為複數 skills
+RUN npx openclaw skills install summarize
 
 # 啟動指令
 CMD ["pnpm", "start"]
