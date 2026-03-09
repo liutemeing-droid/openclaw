@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. 全域安裝必要工具：pnpm, uv (針對 nano-pdf), 以及 summarize 工具本身
-RUN npm install -g pnpm @steipete/summarize
+RUN npm install -g pnpm @steipete/summarize @steipete/xurl
 # 安裝 uv (Python 套件管理器)
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin/:$PATH"
