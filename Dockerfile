@@ -1,4 +1,4 @@
-# 修正：改用 Node.js 22 基礎映像檔
+# 使用 Node.js 22 基礎映像檔
 FROM node:22-slim
 
 # 設定工作目錄
@@ -22,7 +22,10 @@ COPY . .
 # 安裝專案依賴
 RUN pnpm install
 
-# 在建置時預先安裝 summarize 技能
+# ！！！關鍵增加：先執行專案建置 ！！！
+RUN pnpm build
+
+# 建置完後，再安裝 summarize 技能
 RUN npx openclaw skill install summarize
 
 # 啟動指令
