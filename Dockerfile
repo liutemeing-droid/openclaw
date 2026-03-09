@@ -1,32 +1,32 @@
-# 使用 Node.js 22 基礎映像檔
+# 1. 使用正確的 Node.js 22 版本
 FROM node:22-slim
 
 # 設定工作目錄
 WORKDIR /app
 
-# 安裝系統相依性
+# 2. 安裝系統相依性與 Go 環境 (解決 ordercli 的需求)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     git \
     libssl-dev \
     libffi-dev \
+    wget \
+    golang-go \
     && rm -rf /var/lib/apt/lists/*
 
-# 全域安裝 pnpm
-RUN npm install -g pnpm
+# 3. 全域安裝必要工具：pnpm, uv (針對 nano-pdf), 以及 summarize 工具本身
+RUN npm install -g pnpm @steipete/summarize
+# 安裝 uv (Python 套件管理器)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.local/bin/:$PATH"
 
-# 複製專案檔案
+# 4. 複製專案檔案並安裝 OpenClaw 依賴
 COPY . .
-
-# 安裝專案依賴
 RUN pnpm install
 
-# 執行專案建置
+# 5. 執行專案建置 (這是之前缺失的關鍵步驟)
 RUN pnpm build
 
-# 修正：將 skill 改為複數 skills
-RUN npx openclaw skills install summarize
-
-# 啟動指令
+# 6. 啟動指令 (使用 pnpm start)
 CMD ["pnpm", "start"]
