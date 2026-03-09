@@ -18,8 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     golang-go \
     ca-certificates \
+    chromium \
     && rm -rf /var/lib/apt/lists/*
-
 # 4. 全域安裝 pnpm, summarize, clawhub
 RUN npm install -g pnpm @steipete/summarize clawhub
 
