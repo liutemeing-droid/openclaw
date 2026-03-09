@@ -4,7 +4,7 @@ FROM node:22-slim
 # 設定工作目錄
 WORKDIR /app
 
-# 2. 安裝系統相依性（新增了 ca-certificates 解決下載問題）
+# 2. 安裝系統相依性（包含憑證與 Go）
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
@@ -19,11 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # 3. 全域安裝 pnpm, summarize, clawhub
 RUN npm install -g pnpm @steipete/summarize clawhub
 
-# 4. 安裝 uv 並立即安裝 nano-pdf
-# 我們把這兩步結合，並確保路徑正確
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.local/bin/:$PATH"
-RUN /root/.local/bin/uv tool install nano-pdf
+# 4. 強制安裝 uv 到系統路徑，並安裝 nano-pdf
+# 我們指定 BINDIR=/usr/local/bin，讓它成為全域指令
+RUN curl -LsSf https://astral.sh/uv/install.sh | BINDIR=/usr/local/bin sh
+RUN uv tool install nano-pdf
 
 # 5. 複製專案檔案並安裝 OpenClaw 依賴
 COPY . .
